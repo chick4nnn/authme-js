@@ -39,6 +39,11 @@ authme.prototype.compare = function(algorithm, password, hash_password) {
         case 'md5': {
             return strcasecmp(hash_password, md5(password))
         }
+        case 'md5vb': {
+            var info = hash_password.split('$')
+            var password2 = md5(password) + info[2]
+            return strcasecmp(info[3], md5(password2))
+        }
         default: {
             return false
         }
@@ -59,6 +64,10 @@ authme.prototype.hash = function(algorithm, password) {
         }
         case 'md5': {
             return md5(password)
+        }
+        case 'md5vb': {
+            var salt = createSalt()
+            return '$MD5vb$' + salt + '$' + md5(md5(password) + salt)
         }
         default: {
             return 'invalid'
