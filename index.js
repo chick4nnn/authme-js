@@ -16,6 +16,9 @@ function sha256(txt) {
 function whirlpool(txt) {
     return crypto.createHash('whirlpool').update(txt).digest('hex')
 }
+function md5(txt) {
+    return crypto.createHash('md5').update(txt).digest('hex')
+}
 function createSalt() {
     return crypto.randomBytes(16).toString('hex')
 }
@@ -32,6 +35,9 @@ authme.prototype.compare = function(algorithm, password, hash_password) {
         }
         case 'whirlpool': {
             return strcasecmp(hash_password, whirlpool(password))
+        }
+        case 'md5': {
+            return strcasecmp(hash_password, md5(password))
         }
         default: {
             return false
@@ -50,6 +56,9 @@ authme.prototype.hash = function(algorithm, password) {
         }
         case 'whirlpool': {
             return whirlpool(password)
+        }
+        case 'md5': {
+            return md5(password)
         }
         default: {
             return 'invalid'
